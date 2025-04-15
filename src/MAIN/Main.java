@@ -24,8 +24,8 @@ public class Main {
         MembreDAO membreDAO = new MembreDAO();
         EmpruntDAO empruntDAO = new EmpruntDAO();
 
-        int choix;
 
+        int choix = 0;
         do {
             // Menu principal
             System.out.println("\n===== MENU BIBLIOTHÈQUE =====\n");
@@ -46,11 +46,19 @@ public class Main {
             System.out.println("0. Quitter");
             System.out.println("\n");
             System.out.print("Votre choix : ");
-            choix = scanner.nextInt();
-            scanner.nextLine();
+
+
+            String choixStr = scanner.nextLine();  // lire comme une chaîne
+
+            try {
+                choix = Integer.parseInt(choixStr);  // tenter de convertir en int
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Choix invalide, Veuillez entrer un nombre entre 0 et 14. !!!");
+                continue;
+            }
+
+
             System.out.println("\n");
-
-
 
 
             switch (choix) {
@@ -79,7 +87,6 @@ public class Main {
                     break;
 
 
-
                 case 3:
                     // Ajouter un livre
                     System.out.println("============ AJOUT D'UN LIVRE ============\n");
@@ -90,7 +97,8 @@ public class Main {
                     System.out.print("Année de publication : ");
                     int annee = scanner.nextInt();
                     System.out.print("Stock : ");
-                    int stock = scanner.nextInt(); scanner.nextLine();
+                    int stock = scanner.nextInt();
+                    scanner.nextLine();
                     Livre newLivre = new Livre(0, titre, auteur, annee, stock);
                     System.out.println(livreDAO.ajouterLivre(newLivre) ? "✅ Livre ajouté." : "❌ Échec.");
                     break;
@@ -99,30 +107,40 @@ public class Main {
                     // Modifier un livre
                     System.out.println("============ MODIFICATION D'UN LIVRE ============\n");
                     System.out.print("ID du livre à modifier : ");
-                    int idModif = scanner.nextInt(); scanner.nextLine();
+                    int idModif = scanner.nextInt();
+                    scanner.nextLine();
                     Livre lm = livreDAO.getLivreParId(idModif);
-                    if (lm == null) { System.out.println("❌ Livre introuvable (L'ID que vous avez fourni n'existe pas !!!)"); break; }
+                    if (lm == null) {
+                        System.out.println("❌ Livre introuvable (L'ID que vous avez fourni n'existe pas !!!)");
+                        break;
+                    }
                     System.out.print("Nouveau titre (" + lm.getTitre() + ") : ");
-                    String t = scanner.nextLine(); if (!t.isBlank()) lm.setTitre(t);
+                    String t = scanner.nextLine();
+                    if (!t.isBlank()) lm.setTitre(t);
                     System.out.print("Nouvel auteur (" + lm.getAuteur() + ") : ");
-                    String a = scanner.nextLine(); if (!a.isBlank()) lm.setAuteur(a);
+                    String a = scanner.nextLine();
+                    if (!a.isBlank()) lm.setAuteur(a);
                     System.out.print("Nouvelle année de publication (" + lm.getAnneePublication() + ") : ");
-                    String an = scanner.nextLine(); if (!an.isBlank()) lm.setAnneePublication(Integer.parseInt(an));
+                    String an = scanner.nextLine();
+                    if (!an.isBlank()) lm.setAnneePublication(Integer.parseInt(an));
                     System.out.print("Nouveau Stock (" + lm.getStock() + ") : ");
-                    String st = scanner.nextLine(); if (!st.isBlank()) lm.setStock(Integer.parseInt(st));
+                    String st = scanner.nextLine();
+                    if (!st.isBlank()) lm.setStock(Integer.parseInt(st));
                     System.out.println(livreDAO.modifierLivre(lm) ? "✅ Le livre a été Modifié." : "❌ Échec de la modification du livre");
                     break;
-
-
 
 
                 case 5:
                     // Supprimer un livre
                     System.out.println("============ SUPPRESSION D'UN LIVRE ============\n");
                     System.out.print("ID livre à supprimer : ");
-                    int idSup = scanner.nextInt(); scanner.nextLine();
+                    int idSup = scanner.nextInt();
+                    scanner.nextLine();
                     Livre lSup = livreDAO.getLivreParId(idSup);
-                    if (lSup == null) { System.out.println("❌ Livre Introuvable (L'ID que vous avez fourni n'existe pas !!!)"); break; }
+                    if (lSup == null) {
+                        System.out.println("❌ Livre Introuvable (L'ID que vous avez fourni n'existe pas !!!)");
+                        break;
+                    }
                     System.out.print("Confirmer suppression du livre ? (o/n) : ");
                     String confirm = scanner.nextLine();
                     System.out.println(confirm.equalsIgnoreCase("o") && livreDAO.supprimerLivre(idSup) ? "✅ Le livre a été supprimé." : "❌ Échec de la suppresson du livre.");
@@ -145,28 +163,37 @@ public class Main {
                     // Modifier un membre
                     System.out.println("============ MODIFICATION D'UN MEMBRE ============\n");
                     System.out.print("ID membre : ");
-                    int idm = scanner.nextInt(); scanner.nextLine();
+                    int idm = scanner.nextInt();
+                    scanner.nextLine();
                     Membre mm = membreDAO.getMembreParId(idm);
-                    if (mm == null) { System.out.println("❌ Membre Introuvable (L'ID que vous avez fourni n'existe pas dans la base de données"); break; }
+                    if (mm == null) {
+                        System.out.println("❌ Membre Introuvable (L'ID que vous avez fourni n'existe pas dans la base de données");
+                        break;
+                    }
                     System.out.print("Nouveau prénom (" + mm.getPrenom() + ") : ");
-                    String pr = scanner.nextLine(); if (!pr.isBlank()) mm.setPrenom(pr);
+                    String pr = scanner.nextLine();
+                    if (!pr.isBlank()) mm.setPrenom(pr);
                     System.out.print("Nouveau nom (" + mm.getNom() + ") : ");
-                    String no = scanner.nextLine(); if (!no.isBlank()) mm.setNom(no);
+                    String no = scanner.nextLine();
+                    if (!no.isBlank()) mm.setNom(no);
                     System.out.print("Nouvel email (" + mm.getEmail() + ") : ");
-                    String em = scanner.nextLine(); if (!em.isBlank()) mm.setEmail(em);
+                    String em = scanner.nextLine();
+                    if (!em.isBlank()) mm.setEmail(em);
                     System.out.println(membreDAO.modifierMembre(mm) ? "✅ Membre modifié avec succès." : "❌ Échec de la modification du membre.");
                     break;
-
-
 
 
                 case 8:
                     // Supprimer un membre
                     System.out.println("============ SUPPRESSION D'UN MEMBRE ============\n");
                     System.out.print("ID membre : ");
-                    int iddel = scanner.nextInt(); scanner.nextLine();
+                    int iddel = scanner.nextInt();
+                    scanner.nextLine();
                     Membre mdel = membreDAO.getMembreParId(iddel);
-                    if (mdel == null) { System.out.println("❌ Introuvable (L'ID que vous avez fourni n'existe pas dans la base de données\")"); break; }
+                    if (mdel == null) {
+                        System.out.println("❌ Introuvable (L'ID que vous avez fourni n'existe pas dans la base de données\")");
+                        break;
+                    }
                     System.out.print("Confirmer suppression ? (o/n) : ");
                     String cdel = scanner.nextLine();
                     System.out.println(cdel.equalsIgnoreCase("o") && membreDAO.supprimerMembre(iddel) ? "✅ Supprimé." : "❌ Échec (Ce membre a des livres empruntés qui n'ont pas été retournés).");
@@ -192,14 +219,12 @@ public class Main {
                     // Retourner un livre
                     System.out.println("============ RETOUR D'UN LIVRE EMPRUNTÉ ============\n");
                     System.out.print("ID emprunt : ");
-                    int idE = scanner.nextInt(); scanner.nextLine();
+                    int idE = scanner.nextInt();
+                    scanner.nextLine();
                     System.out.print("Date retour (YYYY-MM-DD) : ");
                     LocalDate dR = LocalDate.parse(scanner.nextLine());
                     System.out.println(empruntDAO.enregistrerRetour(idE, dR) ? "✅ Retour enregistré." : "❌ Échec de l'enregistrement du retour.");
                     break;
-
-
-
 
 
                 case 11:
@@ -241,7 +266,8 @@ public class Main {
                 case 14:
                     // Emprunts par membre
                     System.out.print("ID membre : ");
-                    int idmbr = scanner.nextInt(); scanner.nextLine();
+                    int idmbr = scanner.nextInt();
+                    scanner.nextLine();
                     Membre memb = membreDAO.getMembreParId(idmbr);
                     System.out.println("👤  Prenom : " + memb.getPrenom() + "  | Nom : " + memb.getNom() + "  | Email : " + memb.getEmail());
                     System.out.println("\n");
@@ -255,14 +281,13 @@ public class Main {
                     break;
 
 
-
                 case 0:
                     // Quitter le programme
                     System.out.println("👋 Merci et à bientôt !");
                     break;
 
                 default:
-                    System.out.println("❌ Choix invalide, Veuillez entrer un choix valide !!! ");
+                    System.out.println("❌ Choix invalide, Veuillez entrer un nombre entre 0 et 14. !!! ");
             }
 
         } while (choix != 0);
